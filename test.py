@@ -1,6 +1,7 @@
 import sys
 import re
 from openpyxl import *
+from openpyxl.styles import *
 from docx import Document
 
 """ This dictionary was providing inconsistent ordering of the key
@@ -15,7 +16,7 @@ project_info = {}
 
 """ Some values will have to be hardcoded in. This is because there
     are some inconsistencies in the Final CAPA's.
-    
+
     Inconsistent:
     - Two leads for one project, separated by "/" E.g. "Adam/Monika" 
     - Batch name sometimes not included under "Project Information" 
@@ -26,7 +27,7 @@ project_info = {}
     - Detail of Findings table is sometimes 2nd from last table or 3rd
       from last
         - some reports have extra color code table at the end
-      
+
     Consistent:
     - Batch name is always 3rd non-empty line in document
     - followed by lead's name
@@ -38,7 +39,7 @@ project_info = {}
 
 def main():
 
-    wb = load_workbook('TestSheet.xlsx')
+    wb = load_workbook('TestSheet.xlsx', read_only=False, )
     ws = wb.get_sheet_by_name('June Data')
 
     try:
@@ -46,6 +47,7 @@ def main():
     except OSError:
         print('Could not open the document, check that the file name is correct')
         sys.exit()
+
     findings = ['Process Area', 'Goal', 'Practice', 'Description', 'Rating']
 
     # read and process data in document
@@ -63,10 +65,38 @@ def main():
     print(project_info)
     print()
     print(table_data)
+    print()
 
-    for i in ws.iter_rows():
-        for j in i:
-            print(j.value)
+    # trying to find first empty cell index
+    col_index = 0
+    row_index = ws.max_row + 1
+
+    for row in ws.iter_rows():
+        for cell in row:
+            if cell.value == 'Process Area':
+                col_index = cell.column
+                break
+            if cell.value is None:
+                row_index = cell.row + 1
+                break
+
+    print("{}{}".format(col_index, row_index))
+    print()
+
+    style_center = Style(alignment=Alignment(horizontal='general',
+                                             vertical='center',
+                                             wrap_text=True))
+
+    for row in range(len(table_data) - 1):
+        for col in range(ord(col_index), ord(col_index) + 5):
+            new_row = row + row_index
+            new_col = col - 64
+            
+            working_cell = ws.cell(row=new_row, column=new_col)
+            working_cell.style = style_center
+            working_cell.value = str(table_data[row + 1][new_col - 5])
+
+    wb.save('TestSheet.xlsx')
 
 def findTable(doc, row_to_find):
     """ Look for the table that contains the detailed findings. """
@@ -110,7 +140,7 @@ def readDoc(doc):
         text = ' '.join(text.split())
         fillProjectInfo(text)
         data_read.append(text)
-    
+
     return data_read
 
 def fillProjectInfo(line_read):
