@@ -72,37 +72,26 @@ def main():
     print()
 
     # trying to find first empty cell index
-    col_index = 0
-    row_index = 0
+    col_offset = 0
+    row_offset = 0
 
     for row in worksheet.iter_rows():
         for cell in row:
             if cell.value == 'Process Area':
-                col_index = cell.column
+                col_offset = cell.column
                 break
             if cell.value is None:
-                row_index = cell.row + 1
+                row_offset = cell.row + 1
                 break
 
-    print("{}{}".format(col_index, row_index))
+    print("{}{}".format(col_offset, row_offset))
     print()
 
     # put data into the excel worksheet
     for row in range(len(table_data) - 1):
         # data from "findings" table
-        fill_in_table_data(worksheet, table_data, row, row_index, ord(col_index))
-        for col2 in range(1, 5, 1):
-            working_cell = worksheet.cell(row=row_index + row, column=col2)
-            working_cell.alignment = Alignment(horizontal='center',
-                                               vertical='center',
-                                               wrap_text=True)
-            if worksheet.cell(row=1, column=col2).value.strip(' ') == 'Project Name':
-                working_cell.value = PROJECT_INFO['Project Name']
-            elif worksheet.cell(row=1, column=col2).value.strip(' ') == 'SAP ID':
-                working_cell.value = PROJECT_INFO['SAP ID']
-            elif worksheet.cell(row=1, column=col2).value.strip(' ') == 'Date Reported':
-                working_cell.value = PROJECT_INFO['Date Reported']
-
+        fill_in_table_data(worksheet, table_data, row, row_offset, ord(col_offset))
+        fill_in_project_info(worksheet, row, row_offset)
     # save changes made
     workbook.save('TestSheet.xlsx')
 
@@ -118,6 +107,20 @@ def fill_in_table_data(worksheet, table_data, row, row_offset, col_offset):
                                            wrap_text=True)
         working_cell.value = str(table_data[row + 1][new_col - 5])
 
+def fill_in_project_info(worksheet, row, row_offset):
+    """ Helper. """
+    for col2 in range(1, 5, 1):
+        working_cell = worksheet.cell(row=row_offset + row, column=col2)
+        working_cell.alignment = Alignment(horizontal='center',
+                                           vertical='center',
+                                           wrap_text=True)
+        cell_data = worksheet.cell(row=1, column=col2).value.strip(' ')
+        if cell_data == 'Project Name':
+            working_cell.value = PROJECT_INFO['Project Name']
+        elif cell_data == 'SAP ID':
+            working_cell.value = PROJECT_INFO['SAP ID']
+        elif cell_data == 'Date Reported':
+            working_cell.value = PROJECT_INFO['Date Reported']
 
 def find_table(doc, row_to_find):
     """ Look for the table that contains the detailed findings. """
