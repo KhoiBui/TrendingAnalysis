@@ -4,7 +4,7 @@
 import sys
 import re
 from openpyxl import load_workbook
-from openpyxl.styles import Alignment
+from openpyxl.styles import Alignment, PatternFill
 from docx import Document
 
 """ This dictionary was providing inconsistent ordering of the key
@@ -97,15 +97,36 @@ def main():
 
 def fill_in_table_data(worksheet, table_data, row, row_offset, col_offset):
     """ Helper. """
+
+    """ #92D050 - green (LI)
+        #FFC000 - yellow (PI)
+        #FF0000 - red (NI) """
     for col in range(col_offset, col_offset + 5):
         new_row = row + row_offset
         new_col = col - 64
-
+        header_info = worksheet.cell(row=1, column=new_col).value
         working_cell = worksheet.cell(row=new_row, column=new_col)
-        working_cell.alignment = Alignment(horizontal='center',
+        align = 'center'
+        # put data into cell
+        working_cell.value = str(table_data[row + 1][new_col - 5])
+
+        if header_info == 'Finding':
+            align = 'general'
+
+        if header_info == 'Rating':
+            color = ''
+            if working_cell.value == 'LI':
+                color = '92D050'
+            elif working_cell.value == 'PI':
+                color = 'FFC000'
+            elif working_cell.value == 'NI':
+                color = 'FF0000'
+            working_cell.fill = PatternFill(fill_type='solid',
+                                            start_color=color)
+
+        working_cell.alignment = Alignment(horizontal=align,
                                            vertical='center',
                                            wrap_text=True)
-        working_cell.value = str(table_data[row + 1][new_col - 5])
 
 def fill_in_project_info(worksheet, row, row_offset):
     """ Helper. """
@@ -114,12 +135,13 @@ def fill_in_project_info(worksheet, row, row_offset):
         working_cell.alignment = Alignment(horizontal='center',
                                            vertical='center',
                                            wrap_text=True)
-        cell_data = worksheet.cell(row=1, column=col2).value.strip(' ')
-        if cell_data == 'Project Name':
+        header_info = worksheet.cell(row=1, column=col2).value.strip(' ')
+
+        if header_info == 'Project Name':
             working_cell.value = PROJECT_INFO['Project Name']
-        elif cell_data == 'SAP ID':
+        elif header_info == 'SAP ID':
             working_cell.value = PROJECT_INFO['SAP ID']
-        elif cell_data == 'Date Reported':
+        elif header_info == 'Date Reported':
             working_cell.value = PROJECT_INFO['Date Reported']
 
 def find_table(doc, row_to_find):
