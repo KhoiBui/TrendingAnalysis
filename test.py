@@ -1,21 +1,11 @@
 """ Extract data from a specific table in Final CAPA reports
     and put it into trending analysis spreadsheet. """
 
-import sys
-import re
-from openpyxl import load_workbook
+# import sys
+# import re
+import get_data
+import write_data
 from openpyxl.styles import Alignment, PatternFill, Border, Side
-from docx import Document
-
-""" This dictionary was providing inconsistent ordering of the key
-    and value pairs with every run. I thought this was a weird
-    concurrency issue, but I never used multithreading in this
-    program so there was no way for the global dictionary to be
-    used by multiple threads at once. Turns out Python salts the
-    keys and shuffles the order for security reasons.
-    more info @ __hash__ """
-
-PROJECT_INFO = {}
 
 """ Some values will have to be hardcoded in. This is because there
     are some inconsistencies in the Final CAPA's.
@@ -40,57 +30,38 @@ PROJECT_INFO = {}
     - Detail of Findings table have consistent header
         - Process Area   Goal   Practice   Descrition   Rating """
 
+COLOR_CODE = {'LI':'92D050',
+              'PI':'FFC000',
+              'Obv':'FFC000',
+              'NI':'FF0000'}
+
+
+
 def main():
     """ Run the program. """
+    print('Loading...')
+    # get data from doc
+    project = get_data.GetData('TestSheet.xlsx', 'June Data', 'Example_Doc.docx')
+    project.process_document()
+    worksheet = project.get_worksheet()
+    workbook = project.get_workbook()
+    table_data = project.get_table_data()
+    project_info = project.get_project_info()
 
-    workbook = load_workbook('TestSheet.xlsx', read_only=False, )
-    worksheet = workbook.get_sheet_by_name('June Data')
-
-    try:
-        doc = Document("Example_Doc.docx")
-    except OSError:
-        print('Could not open the document, check that the file name is correct')
-        sys.exit()
-
-    findings = ['Process Area', 'Goal', 'Practice', 'Description', 'Rating']
-
-    # read and process data in document
-    info = read_doc(doc)
-    # find the detail findings table in list of tables
-    findings_table = find_table(doc, findings)
-    # put data in found table into a list
-    table_data = read_table_data(findings_table)
-
-    # fill out project information
-    PROJECT_INFO.update({'Project Name':info[2]})
-    PROJECT_INFO.update({'Lead(s)':info[3]})
-    PROJECT_INFO.update({'Date Reported':info[4]})
-
-    # for debugging
-    print(PROJECT_INFO)
-    print()
-    print(table_data)
-    print()
-
-    # get_offsets returns list, [0] == col, [1] == row
-    offsets = get_offsets(worksheet)
-    col_offset = offsets[0]
-    row_offset = offsets[1]
-
-    # put data into the excel worksheet
-    for row in range(len(table_data)):
-        # data from "findings" table
-        fill_in_table_data(worksheet, table_data, row, row_offset, ord(col_offset))
-        fill_in_project_info(worksheet, row, row_offset)
+    # write to spreadsheet
+    do_write = write_data.WriteData(worksheet, table_data, project_info)
+    do_write.write_to_sheet()
 
     # save changes made
     workbook.save('TestSheet.xlsx')
+    print('Done!')
 
 def get_offsets(worksheet):
     """ Get the offset to start printing table data into spreadsheet. """
     offsets = [0] * 2
     for row in worksheet.iter_rows():
         for cell in row:
+            # starting cell of findings table
             if cell.value == 'Process Area':
                 offsets[0] = cell.column
                 break
@@ -130,95 +101,27 @@ def fill_in_table_data(worksheet, table_data, row, row_offset, col_offset):
                                            wrap_text=True)
 
 def pick_rating_color(value):
-    """ Pick the fill color for the Rating field. """
+    """ Pick the fill color for the "Rating" field. """
+    return COLOR_CODE[value]
 
-    """ #92D050 - green (LI)
-        #FFC000 - yellow (PI)
-        #FF0000 - red (NI) """
-
-    if value == 'LI':
-        return '92D050'
-    elif value == 'PI':
-        return 'FFC000'
-    elif value == 'NI':
-        return 'FF0000'
-    else:
-        return ''
-
-def fill_in_project_info(worksheet, row, row_offset):
+def fill_in_project_info(worksheet, project_info, row, row_offset):
     """ Put the project's information into the spreadsheet. """
     for col2 in range(1, 5, 1):
         working_cell = worksheet.cell(row=row_offset + row, column=col2)
         header_info = worksheet.cell(row=1, column=col2).value.strip(' ')
 
-        if header_info == 'Project Name':
-            working_cell.value = PROJECT_INFO['Project Name']
-        elif header_info == 'SAP ID':
-            working_cell.value = PROJECT_INFO['SAP ID']
-        elif header_info == 'Date Reported':
-            working_cell.value = PROJECT_INFO['Date Reported']
+        try:
+            working_cell.value = project_info[header_info]
+        except ValueError:
+            print('Header info does not match what\'s in dictionary.')
+            print('worksheet: {0: >20}'.format(worksheet))
+            print('project_info: {0: >20}'.format(project_info[header_info]))
+            print('row: {0: >20}'.format(row))
+            print('row_offset: {0: >20}'.format(row_offset))
+
         working_cell.alignment = Alignment(horizontal='center',
                                            vertical='center',
                                            wrap_text=True)
-
-def find_table(doc, row_to_find):
-    """ Look for the table that contains the detailed findings. """
-    if row_to_find is None:
-        raise ValueError('Row header is invalid')
-
-    tables = doc.tables
-    header = []
-    for table in tables:
-        header_row = table.rows[0]
-        header[:] = []      # could be slow, do benchmark later
-        for cell in header_row.cells:
-            for paragraph in cell.paragraphs:
-                header.append(paragraph.text.strip(' '))
-        if header == row_to_find:
-            return table
-
-def read_table_data(table):
-    """ Put data in table into a list. """
-    if table is None:
-        raise ValueError('Unable to find table.')
-
-    data = []
-    index = -1
-    for row in table.rows:
-        data.append([])
-        index += 1
-        for cell in row.cells:
-            for para in cell.paragraphs:
-                data[index].append(para.text.strip(' '))
-
-    # don't need header row anymore
-    return data[1:]
-
-def read_doc(doc):
-    """ Read the document and look for specific information. """
-    data_read = []
-    for para in doc.paragraphs:
-        text = para.text
-        # skip blank lines
-        if text == '':
-            continue
-        # remove duplicated spaces
-        text = ' '.join(text.split())
-        fill_project_info(text)
-        data_read.append(text)
-
-    return data_read
-
-def fill_project_info(line_read):
-    """ Find the rest of the project's information. """
-    line_read = line_read.split(':', 1)
-    line_read[0] = re.sub('[- ]', '', line_read[0])
-    key_name = line_read[0].lower()
-
-    if 'sap' in key_name:
-        PROJECT_INFO.update({'SAP ID':line_read[1]})
-    elif 'golive' in key_name:
-        PROJECT_INFO.update({'Go Live Date':line_read[1]})
 
 if __name__ == '__main__':
     main()
