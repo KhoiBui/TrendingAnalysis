@@ -28,12 +28,11 @@ import write_data
     - Detail of Findings table have consistent header
         - Process Area   Goal   Practice   Descrition   Rating """
 
-def main():
+def main(argv):
     """ Run the program. """
     print('Loading...')
     # get data from doc
-    args = get_args()
-    project = get_data.GetData(args[0], args[1], args[2])
+    project = get_data.GetData(argv[0], argv[1], argv[2])
     project.process_document()
     worksheet = project.get_worksheet()
     workbook = project.get_workbook()
@@ -48,17 +47,7 @@ def main():
     workbook.save('TestSheet.xlsx')
     print('Done!')
 
-def get_args():
-    """ Get the program's arguments. """
-    if len(sys.argv) < 3:
-        print('Not enough arguments.')
-
-    args = [''] * 3
-    args[0] = str(sys.argv[1])
-    args[1] = str(sys.argv[2])
-    args[2] = str(sys.argv[3])
-
-    return args
-
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) < 3:
+        raise ValueError('Not enough arguments. Expected-3 got-{}'.format(len(sys.argv)))
+    main(sys.argv[1:])
