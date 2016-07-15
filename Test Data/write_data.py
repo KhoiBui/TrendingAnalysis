@@ -10,7 +10,8 @@ class WriteData(object):
                   'Obv':'FFC000',
                   'NI':'FF0000'}
 
-    def __init__(self, worksheet, table_data, project_info):
+    def __init__(self, workbook, worksheet, table_data, project_info):
+        self.workbook = workbook
         self.worksheet = worksheet
         self.table_data = table_data
         self.project_info = project_info
@@ -68,6 +69,7 @@ class WriteData(object):
     def write_project_info(self, row):
         """ Write project information to sheet. """
         for col in range(1, 5, 1):
+            self.workbook.save('TestSheet.xlsx')
             working_cell = self.worksheet.cell(row=self.row_offset + row, column=col)
             header_info = self.worksheet.cell(row=1, column=col).value.strip(' ')
             working_cell.value = self.project_info[header_info]

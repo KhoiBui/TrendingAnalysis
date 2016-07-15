@@ -40,7 +40,7 @@ def main(argv):
     project_info = project.get_project_info()
 
     # write to spreadsheet
-    do_write = write_data.WriteData(worksheet, table_data, project_info)
+    do_write = write_data.WriteData(workbook, worksheet, table_data, project_info)
     do_write.write_to_sheet()
 
     # save changes made
