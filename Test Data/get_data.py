@@ -39,7 +39,8 @@ class GetData(object):
                 for para in cell.paragraphs:
                     header.append(para.text.strip(' '))
             # check if elements in findings is also in header
-            if [x for x in self.findings for y in header if x in y] == self.findings:
+            cond = len(header) == 5 and header[4] == 'Rating'
+            if cond or [x for x in self.findings for y in header if x in y] == self.findings:
                 self.table = table
                 return
 
@@ -73,8 +74,6 @@ class GetData(object):
             site_name = re.sub('State|Lottery', '', line_read[1])
             site_name = site_name.strip(' ')
             self.project_info.update({'Site':site_name})
-        else:
-            return
 
     def read_table_data(self, table):
         """ Read info in specified table. """
@@ -83,8 +82,10 @@ class GetData(object):
         for row in table.rows:
             data.append([])
             for cell in row.cells:
+                text_data = ''
                 for para in cell.paragraphs:
-                    data[index].append(para.text.strip(' '))
+                    text_data += para.text.strip(' ')
+                data[index].append(text_data)
             index += 1
 
         # don't need header row anymore
