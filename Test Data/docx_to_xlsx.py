@@ -30,17 +30,18 @@ import write_data
 
 def main(argv):
     """ Run the program. """
-    print('Loading...')
+    print()
+    print('Loading {}'.format(argv[2]))
     # get data from doc
     project = get_data.GetData(argv[0], argv[1], argv[2])
     project.process_document()
-    worksheet = project.get_worksheet()
     workbook = project.get_workbook()
+    worksheet = project.get_worksheet()
     table_data = project.get_table_data()
     project_info = project.get_project_info()
 
     # write to spreadsheet
-    do_write = write_data.WriteData(workbook, worksheet, table_data, project_info)
+    do_write = write_data.WriteData(worksheet, table_data, project_info)
     do_write.write_to_sheet()
 
     # save changes made

@@ -1,5 +1,6 @@
 """ Extract the findings table from final CAPA report. """
 
+import sys
 import re
 from docx import Document
 from openpyxl import load_workbook
@@ -37,16 +38,22 @@ class GetData(object):
             for cell in header_row.cells:
                 for para in cell.paragraphs:
                     header.append(para.text.strip(' '))
-            if header == self.findings:
+            # check if elements in findings is also in header
+            if [x for x in self.findings for y in header if x in y] == self.findings:
                 self.table = table
                 return
+
+        # no table found
+        print("Not able to find \"Detail of Findings\" table.")
+        print("Possible that project does not have any findings.")
+        sys.exit()
 
     def read_doc(self):
         """ Read document and put info into list. """
         for para in self.document.paragraphs:
             text = para.text
             # skip blank lines
-            if text is not '':
+            if text.strip():
                 # remove duplicated spaces
                 text = ' '.join(text.split())
                 self.fill_project_info(text)
