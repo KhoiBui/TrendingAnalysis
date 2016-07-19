@@ -30,12 +30,12 @@ import write_data
 
 def main(argv):
     """ Run the program. """
-    print('Loading...')
     # get data from doc
+    # argv[0] = workbook, argv[1] = worksheet, argv[2] = document
     project = get_data.GetData(argv[0], argv[1], argv[2])
     project.process_document()
-    worksheet = project.get_worksheet()
     workbook = project.get_workbook()
+    worksheet = project.get_worksheet()
     table_data = project.get_table_data()
     project_info = project.get_project_info()
 
@@ -45,9 +45,12 @@ def main(argv):
 
     # save changes made
     workbook.save('TestSheet.xlsx')
-    print('Done!')
 
 if __name__ == '__main__':
     if (len(sys.argv) - 1) is not 3:
         raise ValueError('Not enough arguments. Expected-3 got-{}'.format(len(sys.argv) - 1))
+    print()
+    print('Loading {}'.format(sys.argv[3]))
     main(sys.argv[1:])
+    print('Done!')
+    print()

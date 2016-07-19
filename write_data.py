@@ -5,10 +5,10 @@ from openpyxl.styles import Alignment, PatternFill, Border, Side
 class WriteData(object):
     """ Write to spreadsheet. """
 
-    COLOR_CODE = {'LI':'92D050',
-                  'PI':'FFC000',
-                  'Obv':'FFC000',
-                  'NI':'FF0000'}
+    COLOR_CODE = {'li':'92D050',
+                  'pi':'FFC000',
+                  'obv':'FFC000',
+                  'ni':'FF0000'}
 
     def __init__(self, worksheet, table_data, project_info):
         self.worksheet = worksheet
@@ -44,6 +44,7 @@ class WriteData(object):
             header_info = self.worksheet.cell(row=1, column=new_col).value
             working_cell = self.worksheet.cell(row=new_row, column=new_col)
             align = 'center'
+
             # put data into cell
             working_cell.value = str(self.table_data[row][new_col - 5])
 
@@ -51,9 +52,6 @@ class WriteData(object):
                 align = 'general'
             elif header_info == 'Rating':
                 color = self.pick_rating_color(working_cell.value)
-                if color == '':
-                    raise ValueError('Not a valid Rating {}'.format(working_cell.value))
-
                 working_cell.fill = PatternFill(fill_type='solid',
                                                 start_color=color)
                 working_cell.border = Border(left=Side(border_style='thin'),
@@ -77,4 +75,8 @@ class WriteData(object):
 
     def pick_rating_color(self, value):
         """ Pick the fill color for the "Rating" field. """
-        return self.COLOR_CODE[value]
+        value = value.lower().strip()
+        if value in self.COLOR_CODE:
+            return self.COLOR_CODE[value]
+        else:
+            return 'FFFFFF'
