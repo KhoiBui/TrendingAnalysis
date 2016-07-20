@@ -2,24 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6fa38abb-9b47-4d23-bff3-22642399882b" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/NY_CAPA.docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Test Data/CA_CAPA.docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Test Data/CR_CAPA.docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Test Data/CZH_CAPA.docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Test Data/IN_CAPA.docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Test Data/NJ_CAPA.docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Test Data/NY_CAPA.docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Test Data/docx_to_xlsx.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Test Data/get_data.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Test Data/write_data.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/output" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test2.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TestSheet.xlsx" afterPath="$PROJECT_DIR$/TestSheet.xlsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docx_to_xlsx.py" afterPath="$PROJECT_DIR$/docx_to_xlsx.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/get_data.py" afterPath="$PROJECT_DIR$/get_data.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/write_data.py" afterPath="$PROJECT_DIR$/write_data.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run_prog.py" afterPath="$PROJECT_DIR$/run_prog.py" />
     </list>
     <ignored path="openpyxl.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,8 +29,8 @@
       <file leaf-file-name="run_prog.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/run_prog.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="21" column="42" selection-start-line="21" selection-start-column="42" selection-end-line="21" selection-end-column="42" />
+            <state relative-caret-position="335">
+              <caret line="53" column="36" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -311,7 +297,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1358" y="-8" width="1456" height="916" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.120592386" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -431,8 +417,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/run_prog.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="21" column="42" selection-start-line="21" selection-start-column="42" selection-end-line="21" selection-end-column="42" />
+        <state relative-caret-position="335">
+          <caret line="53" column="36" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
