@@ -5,6 +5,7 @@ import re
 from docx import Document
 from openpyxl import load_workbook
 
+
 class GetData(object):
     """ Read the final CAPA and extract info. """
 
@@ -14,9 +15,9 @@ class GetData(object):
     table = ''
     findings = ['Process Area', 'Goal', 'Practice', 'Description', 'Rating']
 
-    def __init__(self, workbook, worksheet, document):
-        self.workbook = load_workbook(workbook, read_only=False)
-        self.worksheet = self.workbook.get_sheet_by_name(worksheet)
+    def __init__(self, document):
+        self.workbook = load_workbook('Draft_Detail_Findings.xlsx')
+        self.worksheet = self.workbook.get_sheet_by_name('Template')
         self.document = Document(document)
 
     def process_document(self):
@@ -24,25 +25,25 @@ class GetData(object):
         self.read_doc()
         self.find_table()
         self.read_table_data(self.table)
-        self.project_info.update({'Project Name':self.data_read[2]})
-        self.project_info.update({'Lead(s)':self.data_read[3]})
-        self.project_info.update({'Date Reported':self.data_read[4]})
+        self.project_info.update({'Project Name': self.data_read[2]})
+        self.project_info.update({'Lead(s)': self.data_read[3]})
+        self.project_info.update({'Date Reported': self.data_read[4]})
 
     def find_table(self):
         """ Locate the detailed findings table. """
         tables = self.document.tables
         header = []
         for table in tables:
-            header_row = table.rows[0]
-            header[:] = []
-            for cell in header_row.cells:
-                for para in cell.paragraphs:
-                    header.append(para.text.strip(' '))
-            # check if elements in findings is also in header
-            cond = len(header) == 5 and header[4] == 'Rating'
-            if cond or [x for x in self.findings for y in header if x in y] == self.findings:
-                self.table = table
-                return
+            for row in table.rows:
+                header[:] = []
+                for cell in row.cells:
+                    for para in cell.paragraphs:
+                        header.append(para.text.strip(' '))
+                # check if elements in findings is also in header
+                cond = len(header) == 5 and header[4] == 'Rating'
+                if cond or [x for x in self.findings for y in header if x in y] == self.findings:
+                    self.table = table
+                    return
 
         # no table found
         print("Not able to find \"Detail of Findings\" table.")
@@ -67,13 +68,13 @@ class GetData(object):
         key_name = line_read[0].lower()
 
         if 'sap' in key_name:
-            self.project_info.update({'SAP ID':line_read[1].strip(' ')})
+            self.project_info.update({'SAP ID': line_read[1].strip(' ')})
         elif 'golive' in key_name:
-            self.project_info.update({'Go Live Date':line_read[1]})
+            self.project_info.update({'Go Live Date': line_read[1]})
         elif 'customer' in key_name:
             site_name = re.sub('State|Lottery', '', line_read[1])
             site_name = site_name.strip(' ')
-            self.project_info.update({'Site':site_name})
+            self.project_info.update({'Site': site_name})
 
     def read_table_data(self, table):
         """ Read info in specified table. """

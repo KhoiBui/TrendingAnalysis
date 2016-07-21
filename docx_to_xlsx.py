@@ -26,13 +26,14 @@ import write_data
     - SAP ID
     - "Project Stakeholders" section follows the same order
     - Detail of Findings table have consistent header
-        - Process Area   Goal   Practice   Descrition   Rating """
+        - Process Area   Goal   Practice   Description   Rating """
+
 
 def main(argv):
     """ Run the program. """
     # get data from doc
     # argv[0] = workbook, argv[1] = worksheet, argv[2] = document
-    project = get_data.GetData(argv[0], argv[1], argv[2])
+    project = get_data.GetData(argv[0])
     project.process_document()
     workbook = project.get_workbook()
     worksheet = project.get_worksheet()
@@ -44,13 +45,11 @@ def main(argv):
     do_write.write_to_sheet()
 
     # save changes made
-    workbook.save('TestSheet.xlsx')
+    workbook.save('Draft_Detail_Findings.xlsx')
 
 if __name__ == '__main__':
-    if (len(sys.argv) - 1) is not 3:
-        raise ValueError('Not enough arguments. Expected-3 got-{}'.format(len(sys.argv) - 1))
+    if (len(sys.argv) - 1) is not 1:
+        raise ValueError('Not enough arguments. Expected-2 got-{}'.format(len(sys.argv) - 1))
     print()
-    print('Loading {}'.format(sys.argv[3]))
+    print('Loading {}'.format(sys.argv[1]))
     main(sys.argv[1:])
-    print('Done!')
-    print()

@@ -20,14 +20,15 @@ class TrendGUI(Frame):
         self._folder_path = None
 
         self.frame_1 = Frame(self, relief=RAISED)
-        self.run_button = Button(self, text='Run', command=self.run_program)
+        self.run_button = Button(self, text='Run', width=10,
+                                 command=self.run_program)
         self.workbook_button = Button(self.frame_1, text='Select Workbook',
                                       width=15, command=self.get_workbook)
         self.file_button = Button(self.frame_1, text='Select File',
                                   width=15, command=self.get_file)
         self.folder_button = Button(self.frame_1, text='Select Folder',
                                     width=15, command=self.get_folder)
-        self.close_button = Button(self, text='Close', width=15,
+        self.close_button = Button(self, text='Close', width=10,
                                    command=self.quit)
 
         self.init_gui()
@@ -45,6 +46,7 @@ class TrendGUI(Frame):
         self.file_button.pack(side=RIGHT, pady=5)
         self.workbook_button.pack(side=RIGHT, padx=5, pady=5)
         self.close_button.pack(side=RIGHT, padx=5, pady=5)
+        self.run_button.pack(side=RIGHT, pady=5)
 
     def get_file(self):
         self._file_path = filedialog.askopenfilename()
@@ -63,7 +65,7 @@ class TrendGUI(Frame):
     def run_program(self):
         # user selected one CAPA
         if self._folder_path is None:
-            pass
+            docx_to_xlsx.main(self._file_path)
         # user selected a folder of CAPA's
         elif self._file_path is None:
             pass
