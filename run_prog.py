@@ -1,8 +1,10 @@
+""" Run the program with a GUI. """
+
 import docx_to_xlsx
 import os, sys
 import tkinter as tk
-from tkinter import filedialog, Frame, BOTH, Button, RIGHT, RAISED, X,\
-                    LEFT, Label, Entry, CENTER, StringVar
+from tkinter import filedialog, Frame, BOTH, Button, RIGHT, RAISED
+
 
 class TrendGUI(Frame):
 
@@ -13,45 +15,64 @@ class TrendGUI(Frame):
         Frame.__init__(self, parent, background='white')
         # saved reference to parent widget. "Tk root window"
         self.parent = parent
-        self.month_var = StringVar()
-        self.initGUI()
+        self._workbook = None
+        self._file_path = None
+        self._folder_path = None
 
-    def initGUI(self):
+        self.frame_1 = Frame(self, relief=RAISED)
+        self.run_button = Button(self, text='Run', command=self.run_program)
+        self.workbook_button = Button(self.frame_1, text='Select Workbook',
+                                      width=15, command=self.get_workbook)
+        self.file_button = Button(self.frame_1, text='Select File',
+                                  width=15, command=self.get_file)
+        self.folder_button = Button(self.frame_1, text='Select Folder',
+                                    width=15, command=self.get_folder)
+        self.close_button = Button(self, text='Close', width=15,
+                                   command=self.quit)
+
+        self.init_gui()
+
+    def init_gui(self):
         """ Create the GUI. """
         # set title of root window
         self.parent.title('Trending Analysis Program')
         # fill frame to take up whole of root window
         self.pack(fill=BOTH, expand=True)
-
-        # Fields
-        frame = Frame(self, relief=RAISED)
-        frame.pack(fill=BOTH, expand=True)
-        month_lbl = Label(frame, text='Month', width=6)
-        month_lbl.pack(side=LEFT, padx=5, pady=5)
-
-        self.month_entry = Entry(frame, textvariable=self.month_var, justify=CENTER)
-        self.month_entry.pack(fill=X, padx=5, expand=True)
-        self.month_entry.bind('<Return>', self.get_month)
+        self.frame_1.pack(fill=BOTH, expand=True)
 
         # Buttons
-        close_button = Button(self, text='Close', command=self.quit)
-        close_button.pack(side=RIGHT, padx=5, pady=5)
-        folder_button = Button(self, text='Select Folder')
-        folder_button.pack(side=RIGHT)
-        file_button = Button(self, text='Select File')
-        file_button.pack(side=RIGHT, padx=5, pady=5)
+        self.folder_button.pack(side=RIGHT, padx=5)
+        self.file_button.pack(side=RIGHT, pady=5)
+        self.workbook_button.pack(side=RIGHT, padx=5, pady=5)
+        self.close_button.pack(side=RIGHT, padx=5, pady=5)
 
-    def get_month(self, *args):
-        """ Return the input month. """
-        value = self.month_entry.get()
-        if value not in self.months:
-            return None
-        self.month_var = value
+    def get_file(self):
+        self._file_path = filedialog.askopenfilename()
+        self.file_button.config(text='File Selected')
+        self.folder_button.destroy()
+
+    def get_folder(self):
+        self._folder_path = filedialog.askdirectory()
+        self.folder_button.config(text='Folder Selected')
+        self.file_button.destroy()
+
+    def get_workbook(self):
+        self._workbook = filedialog.askopenfilename()
+        self.workbook_button.config(text='Workbook Selected')
+
+    def run_program(self):
+        # user selected one CAPA
+        if self._folder_path is None:
+            pass
+        # user selected a folder of CAPA's
+        elif self._file_path is None:
+            pass
+
 
 def main():
 
     root = tk.Tk()
-    root.geometry("250x100+300+300")
+    root.geometry("350x100+300+300")
     app = TrendGUI(root)
     root.mainloop()
 
