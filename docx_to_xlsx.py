@@ -32,7 +32,7 @@ import write_data
 def main(argv):
     """ Run the program. """
     print('Loading {}'.format(argv))
-    destination = '../../Draft_Detail_Findings.xlsx'
+    destination = '../Draft_Detail_Findings.xlsx'
     project = get_data.GetData(argv, destination)
     project.process_document()
     workbook = project.get_workbook()
