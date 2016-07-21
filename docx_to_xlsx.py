@@ -1,7 +1,7 @@
 """ Extract data from a specific table in Final CAPA reports
     and put it into trending analysis spreadsheet. """
 
-import sys
+import sys, os
 import get_data
 import write_data
 
@@ -32,7 +32,7 @@ import write_data
 def main(argv):
     """ Run the program. """
     print('Loading {}'.format(argv))
-    destination = 'Draft_Detail_Findings.xlsx'
+    destination = '../../Draft_Detail_Findings.xlsx'
     project = get_data.GetData(argv, destination)
     project.process_document()
     workbook = project.get_workbook()

@@ -1,6 +1,5 @@
 """ Extract the findings table from final CAPA report. """
 
-import sys
 import re
 from docx import Document
 from openpyxl import load_workbook
@@ -9,16 +8,15 @@ from openpyxl import load_workbook
 class GetData(object):
     """ Read the final CAPA and extract info. """
 
-    project_info = {}
-    table_data = []
-    data_read = []
-    table = None
-    findings = ['Process Area', 'Goal', 'Practice', 'Description', 'Rating']
-
     def __init__(self, document, workbook):
         self.workbook = load_workbook(workbook)
         self.worksheet = self.workbook.get_sheet_by_name('Template')
         self.document = Document(document)
+        self.table_data = []
+        self.data_read = []
+        self.project_info = {}
+        self.table = None
+        self.findings = ['Process Area', 'Goal', 'Practice', 'Description', 'Rating']
 
     def process_document(self):
         """ Process the document. """
@@ -26,11 +24,10 @@ class GetData(object):
         self.find_table()
         if self.table is None:
             # no table found
-            print("#####   Not able to find \"Detail of Findings\" table.  #####")
+            print("#####    Not able to find \"Detail of Findings\" table.   #####")
             print("##### Possible that project does not have any findings. #####")
             return
         self.read_table_data(self.table)
-        print('Project Name: {}'.format(self.data_read[2]))
         self.project_info.update({'Project Name': self.data_read[2]})
         self.project_info.update({'Lead(s)': self.data_read[3]})
         self.project_info.update({'Date Reported': self.data_read[4]})
@@ -53,7 +50,6 @@ class GetData(object):
 
     def read_doc(self):
         """ Read document and put info into list. """
-        self.data_read[:] = []
         for para in self.document.paragraphs:
             text = para.text
             # skip blank lines

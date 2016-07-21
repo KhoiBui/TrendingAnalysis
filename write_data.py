@@ -2,13 +2,14 @@
 
 from openpyxl.styles import Alignment, PatternFill, Border, Side
 
+
 class WriteData(object):
     """ Write to spreadsheet. """
 
-    COLOR_CODE = {'li':'92D050',
-                  'pi':'FFC000',
-                  'obv':'FFC000',
-                  'ni':'FF0000'}
+    COLOR_CODE = {'li': '92D050',
+                  'pi': 'FFC000',
+                  'obv': 'FFC000',
+                  'ni': 'FF0000'}
 
     def __init__(self, worksheet, table_data, project_info):
         self.worksheet = worksheet
@@ -16,7 +17,6 @@ class WriteData(object):
         self.project_info = project_info
         self.row_offset = 0
         self.col_offset = 0
-
 
     def write_to_sheet(self):
         """ Write extracted data to spreadsheet. """
