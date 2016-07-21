@@ -31,9 +31,9 @@ import write_data
 
 def main(argv):
     """ Run the program. """
-    # get data from doc
-    # argv[0] = workbook, argv[1] = worksheet, argv[2] = document
-    project = get_data.GetData(argv[0])
+    print('Loading {}'.format(argv))
+    destination = 'Draft_Detail_Findings.xlsx'
+    project = get_data.GetData(argv, destination)
     project.process_document()
     workbook = project.get_workbook()
     worksheet = project.get_worksheet()
@@ -44,12 +44,9 @@ def main(argv):
     do_write = write_data.WriteData(worksheet, table_data, project_info)
     do_write.write_to_sheet()
 
-    # save changes made
-    workbook.save('Draft_Detail_Findings.xlsx')
+    # save changes
+    print('Saving to {}'.format(destination))
+    workbook.save(destination)
 
 if __name__ == '__main__':
-    if (len(sys.argv) - 1) is not 1:
-        raise ValueError('Not enough arguments. Expected-2 got-{}'.format(len(sys.argv) - 1))
-    print()
-    print('Loading {}'.format(sys.argv[1]))
-    main(sys.argv[1:])
+    main(sys.argv[1])

@@ -12,11 +12,11 @@ class GetData(object):
     project_info = {}
     table_data = []
     data_read = []
-    table = ''
+    table = None
     findings = ['Process Area', 'Goal', 'Practice', 'Description', 'Rating']
 
-    def __init__(self, document):
-        self.workbook = load_workbook('Draft_Detail_Findings.xlsx')
+    def __init__(self, document, workbook):
+        self.workbook = load_workbook(workbook)
         self.worksheet = self.workbook.get_sheet_by_name('Template')
         self.document = Document(document)
 
@@ -24,7 +24,13 @@ class GetData(object):
         """ Process the document. """
         self.read_doc()
         self.find_table()
+        if self.table is None:
+            # no table found
+            print("#####   Not able to find \"Detail of Findings\" table.  #####")
+            print("##### Possible that project does not have any findings. #####")
+            return
         self.read_table_data(self.table)
+        print('Project Name: {}'.format(self.data_read[2]))
         self.project_info.update({'Project Name': self.data_read[2]})
         self.project_info.update({'Lead(s)': self.data_read[3]})
         self.project_info.update({'Date Reported': self.data_read[4]})
@@ -45,13 +51,9 @@ class GetData(object):
                     self.table = table
                     return
 
-        # no table found
-        print("Not able to find \"Detail of Findings\" table.")
-        print("Possible that project does not have any findings.")
-        sys.exit()
-
     def read_doc(self):
         """ Read document and put info into list. """
+        self.data_read[:] = []
         for para in self.document.paragraphs:
             text = para.text
             # skip blank lines
