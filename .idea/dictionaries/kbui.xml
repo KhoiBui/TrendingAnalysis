@@ -2,6 +2,12 @@
   <dictionary name="kbui">
     <words>
       <w>capa</w>
+      <w>conv</w>
+      <w>docx</w>
+      <w>oice</w>
+      <w>prog</w>
+      <w>wordconv</w>
+      <w>xlsx</w>
     </words>
   </dictionary>
 </component>

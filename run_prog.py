@@ -1,16 +1,15 @@
 """ Run the program with a GUI. """
 
 import docx_to_xlsx
-import os, sys
+import os
+import subprocess
+import time
 import tkinter as tk
 from tkinter import filedialog, Frame, BOTH, Button, RIGHT, RAISED,\
                     LEFT
 
 
 class TrendProg(Frame):
-
-    months = ['January', 'February', 'March', 'April', 'May', 'June',
-              'July', 'August', 'September', 'October', 'November', 'December']
 
     def __init__(self, parent):
         Frame.__init__(self, parent, background='white')
@@ -48,11 +47,17 @@ class TrendProg(Frame):
     def get_file(self):
         self._file_path = filedialog.askopenfilename()
         self.file_button.config(text='File Selected!')
+        # check that file(s) selected is .docx NOT .doc
+        self.check_ext()
+        self.file_button.pack(fill=BOTH, expand=True, padx=5, pady=5)
         self.folder_button.destroy()
 
     def get_folder(self):
         self._folder_path = filedialog.askdirectory()
         self.folder_button.config(text='Folder Selected!')
+        # check that file(s) selected is .docx NOT .doc
+        self.check_ext()
+        self.folder_button.pack(fill=BOTH, expand=True, padx=5, pady=5)
         self.file_button.destroy()
 
     def run_program(self):
@@ -66,7 +71,43 @@ class TrendProg(Frame):
                 file_name = str(self._folder_path + '/' + f)
                 docx_to_xlsx.main(file_name)
 
-        self.quit()
+        # get ready to end the program
+        self.frame_1.destroy()
+        self.run_button.destroy()
+        self.close_button.config(text='Done!')
+        self.close_button.pack(fill=BOTH, expand=True, padx=10, pady=10)
+
+    def check_ext(self):
+        if self._folder_path is None:
+            self._file_path = self.convert_to_docx(self._file_path)
+            print('Ready. Press \'Run\' to Proceed.')
+        elif self._file_path is None:
+            for f in os.listdir(self._folder_path):
+                file_name = str(self._folder_path + '/' + f)
+                self.convert_to_docx(file_name)
+            print('Ready. Press \'Run\' to Proceed.')
+        else:
+            raise OSError('File(s) does not exist or you did not select anything. ')
+
+    @classmethod
+    def convert_to_docx(cls, user_input):
+        if '.docx' in str(user_input):
+            return user_input
+        else:
+            new_file_name = user_input.split(' ')
+            new_file_name = new_file_name[0] + '_' + new_file_name[1] + '_CAPA.docx'
+            word_conv = r'C:\Program Files (x86)\Microsoft Office\Office12\wordconv.exe'
+            commands = ['wordconv.exe', '-oice', '-nme', user_input, new_file_name]
+            try:
+                print('Converting {} to {}'.format(user_input, new_file_name))
+                subprocess.Popen(commands, executable=word_conv)
+                while not os.path.exists(new_file_name):
+                    time.sleep(1)
+                print('Removing old .doc file ...')
+                os.remove(user_input)
+                return new_file_name
+            except OSError:
+                print('Failed to convert file(s). Check to see if it exists.')
 
 
 def main():
