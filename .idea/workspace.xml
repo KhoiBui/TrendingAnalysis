@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6fa38abb-9b47-4d23-bff3-22642399882b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/kbui.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/kbui.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docx_to_xlsx.py" afterPath="$PROJECT_DIR$/docx_to_xlsx.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/get_data.py" afterPath="$PROJECT_DIR$/get_data.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project_data.py" afterPath="$PROJECT_DIR$/project_data.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trend.py" afterPath="$PROJECT_DIR$/trend.py" />
@@ -31,8 +29,8 @@
       <file leaf-file-name="write_data.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/write_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-776">
-              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+            <state relative-caret-position="139">
+              <caret line="89" column="26" selection-start-line="89" selection-start-column="26" selection-end-line="89" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -41,8 +39,8 @@
       <file leaf-file-name="docx_to_xlsx.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docx_to_xlsx.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
+            <state relative-caret-position="214">
+              <caret line="16" column="34" selection-start-line="16" selection-start-column="34" selection-end-line="16" selection-end-column="34" />
               <folding>
                 <element signature="e#117#127#0" expanded="true" />
               </folding>
@@ -53,8 +51,8 @@
       <file leaf-file-name="project_data.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/project_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="379">
-              <caret line="28" column="33" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
+            <state relative-caret-position="360">
+              <caret line="42" column="16" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -63,8 +61,8 @@
       <file leaf-file-name="trend.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trend.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="66" column="30" selection-start-line="66" selection-start-column="30" selection-end-line="66" selection-end-column="30" />
+            <state relative-caret-position="285">
+              <caret line="79" column="13" selection-start-line="79" selection-start-column="13" selection-end-line="79" selection-end-column="13" />
               <folding>
                 <element signature="e#37#56#0" expanded="true" />
               </folding>
@@ -75,8 +73,8 @@
       <file leaf-file-name="get_data.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/get_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
+            <state relative-caret-position="300">
+              <caret line="116" column="92" selection-start-line="116" selection-start-column="12" selection-end-line="116" selection-end-column="92" />
               <folding>
                 <element signature="e#60#69#0" expanded="true" />
               </folding>
@@ -105,9 +103,9 @@
         <option value="$PROJECT_DIR$/test_gui.py" />
         <option value="$PROJECT_DIR$/run_prog.py" />
         <option value="$PROJECT_DIR$/write_data.py" />
-        <option value="$PROJECT_DIR$/trend.py" />
-        <option value="$PROJECT_DIR$/get_data.py" />
         <option value="$PROJECT_DIR$/docx_to_xlsx.py" />
+        <option value="$PROJECT_DIR$/get_data.py" />
+        <option value="$PROJECT_DIR$/trend.py" />
         <option value="$PROJECT_DIR$/project_data.py" />
       </list>
     </option>
@@ -566,10 +564,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/write_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="89" column="26" selection-start-line="89" selection-start-column="26" selection-end-line="89" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/get_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="116" column="92" selection-start-line="116" selection-start-column="12" selection-end-line="116" selection-end-column="92" />
+          <folding>
+            <element signature="e#60#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/docx_to_xlsx.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
+        <state relative-caret-position="214">
+          <caret line="16" column="34" selection-start-line="16" selection-start-column="34" selection-end-line="16" selection-end-column="34" />
           <folding>
             <element signature="e#117#127#0" expanded="true" />
           </folding>
@@ -578,36 +594,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trend.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="66" column="30" selection-start-line="66" selection-start-column="30" selection-end-line="66" selection-end-column="30" />
+        <state relative-caret-position="285">
+          <caret line="79" column="13" selection-start-line="79" selection-start-column="13" selection-end-line="79" selection-end-column="13" />
           <folding>
             <element signature="e#37#56#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/write_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-776">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/get_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
-          <folding>
-            <element signature="e#60#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/project_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379">
-          <caret line="28" column="33" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
+        <state relative-caret-position="360">
+          <caret line="42" column="16" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="16" />
           <folding />
         </state>
       </provider>

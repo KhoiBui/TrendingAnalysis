@@ -8,6 +8,23 @@ from openpyxl import load_workbook
 class GetData(object):
     """ Read the final CAPA and extract info. """
 
+    PROCESS_AREAS = [{'PP': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'IPM': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'PMC': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'RSKM': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'REQM': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'RD': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'TS': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'PI': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'VER': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'VAL': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'CM': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'MA': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'PPQA': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'DAR': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'SAM': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0},
+                     {'All PA\'s': 0, 'li': 0, 'pi': 0, 'ni': 0, 'obv': 0}]
+
     def __init__(self, document, workbook, worksheet):
         self.document = Document(document)
         self.workbook = load_workbook(workbook)
@@ -94,6 +111,11 @@ class GetData(object):
         self.table_data = data[1:]
         # trim end of lists
         self.table_data = [row[:5] for row in self.table_data]
+
+    def parse_process_areas(self):
+        for row in self.table_data:
+            pa = next((item for item in self.PROCESS_AREAS if row[0].upper() in item), None)
+            print(pa)
 
     def get_table_data(self):
         """ Return data in table. """
