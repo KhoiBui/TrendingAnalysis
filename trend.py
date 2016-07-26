@@ -33,12 +33,12 @@ class TrendProg(Frame):
     def init_gui(self):
         """ Create the GUI. """
         # set title of root window
-        self.parent.title('Trending Analysis Program')
+        self.parent.title('Trending Analysis')
         # fill frame to take up whole of root window
         self.pack(fill=BOTH, expand=True)
         self.frame_1.pack(fill=BOTH, expand=True)
 
-        # Buttons
+        # put buttons on GUI
         self.folder_button.pack(side=RIGHT, padx=5)
         self.file_button.pack(side=LEFT, padx=5, pady=5)
         self.close_button.pack(side=RIGHT, padx=5, pady=5)
@@ -46,52 +46,54 @@ class TrendProg(Frame):
 
     def get_file(self):
         self._file_path = filedialog.askopenfilename()
-        self.file_button.config(text='File Selected!')
-        # check that file(s) selected is .docx NOT .doc
-        self.check_ext()
-        self.file_button.pack(fill=BOTH, expand=True, padx=5, pady=5)
-        self.folder_button.destroy()
+        if self._file_path != '':
+            self.file_button.config(text='File Selected!')
+            # check that file(s) selected is .docx NOT .doc
+            self.check_ext()
+            self.file_button.pack(fill=BOTH, expand=True, padx=5, pady=5)
+            self.folder_button.destroy()
 
     def get_folder(self):
         self._folder_path = filedialog.askdirectory()
-        self.folder_button.config(text='Folder Selected!')
-        # check that file(s) selected is .docx NOT .doc
-        self.check_ext()
-        self.folder_button.pack(fill=BOTH, expand=True, padx=5, pady=5)
-        self.file_button.destroy()
+        if self._folder_path != '':
+            self.folder_button.config(text='Folder Selected!')
+            # check that file(s) selected is .docx NOT .doc
+            self.check_ext()
+            self.folder_button.pack(fill=BOTH, expand=True, padx=5, pady=5)
+            self.file_button.destroy()
 
     def run_program(self):
-        """ Run the program to compile CAPA's. """
         # user selected one CAPA
         if self._folder_path is None:
             docx_to_xlsx.main(self._file_path)
         # user selected a folder of CAPA's
         elif self._file_path is None:
             for f in os.listdir(self._folder_path):
+                # get full path name
                 file_name = str(self._folder_path + '/' + f)
                 docx_to_xlsx.main(file_name)
 
         # get ready to end the program
         self.frame_1.destroy()
         self.run_button.destroy()
-        self.close_button.config(text='Done!')
+        self.close_button.config(text='Done.')
         self.close_button.pack(fill=BOTH, expand=True, padx=10, pady=10)
 
     def check_ext(self):
-        if self._folder_path is None:
+        if self._file_path is not None:
             self._file_path = self.convert_to_docx(self._file_path)
-            print('Ready. Press \'Run\' to Proceed.')
-        elif self._file_path is None:
+            print('Ready. Click \'Run\' to Proceed.')
+        elif self._folder_path is not None:
             for f in os.listdir(self._folder_path):
                 file_name = str(self._folder_path + '/' + f)
                 self.convert_to_docx(file_name)
-            print('Ready. Press \'Run\' to Proceed.')
+            print('Ready. Click \'Run\' to Proceed.')
         else:
             raise OSError('File(s) does not exist or you did not select anything. ')
 
     @classmethod
     def convert_to_docx(cls, user_input):
-        if '.docx' in str(user_input):
+        if str(user_input).endswith('.docx'):
             return user_input
         else:
             new_file_name = user_input.split(' ')
@@ -101,6 +103,7 @@ class TrendProg(Frame):
             try:
                 print('Converting {} to {}'.format(user_input, new_file_name))
                 subprocess.Popen(commands, executable=word_conv)
+                # wait for converted file to be created
                 while not os.path.exists(new_file_name):
                     time.sleep(1)
                 print('Removing old .doc file ...')

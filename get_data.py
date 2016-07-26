@@ -28,6 +28,9 @@ class GetData(object):
             print("##### Possible that project does not have any findings. #####")
             return
         self.read_table_data(self.table)
+        """ The rest of project_info's values are updated in write_data.py
+            since picking the 'Rating' cells' color also checks for what
+            the rating is. """
         self.project_info.update({'Project Name': self.data_read[2]})
         self.project_info.update({'Lead(s)': self.data_read[3]})
         self.project_info.update({'Date Reported': self.data_read[4]})

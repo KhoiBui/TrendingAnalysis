@@ -6,10 +6,10 @@ from openpyxl.styles import Alignment, PatternFill, Border, Side
 class WriteData(object):
     """ Write to spreadsheet. """
 
-    COLOR_CODE = {'li': '92D050',
-                  'pi': 'FFC000',
-                  'obv': 'FFC000',
-                  'ni': 'FF0000'}
+    COLOR_CODE = {'LI': '92D050',
+                  'PI': 'FFC000',
+                  'OBV': 'FFC000',
+                  'NI': 'FF0000'}
 
     def __init__(self, worksheet, table_data, project_info):
         self.worksheet = worksheet
@@ -17,6 +17,8 @@ class WriteData(object):
         self.project_info = project_info
         self.row_offset = 0
         self.col_offset = 0
+        self.process_areas = {}
+        self.project_info.update({'#Findings': 0})
 
     def write_to_sheet(self):
         """ Write extracted data to spreadsheet. """
@@ -51,7 +53,14 @@ class WriteData(object):
             if header_info == 'Finding':
                 align = 'general'
             elif header_info == 'Rating':
-                color = self.pick_rating_color(working_cell.value)
+                # update rating value
+                if working_cell.value not in self.project_info:
+                    self.project_info.update({working_cell.value: 1})
+                else:
+                    self.project_info[working_cell.value] += 1
+                self.project_info['#Findings'] += 1
+
+                color = self.pick_rating_color(working_cell.value.upper())
                 working_cell.fill = PatternFill(fill_type='solid',
                                                 start_color=color)
                 working_cell.border = Border(left=Side(border_style='thin'),
@@ -66,6 +75,7 @@ class WriteData(object):
     def write_project_info(self, row):
         """ Write project information to sheet. """
         for col in range(1, 5, 1):
+            # Styling has to be applied directly to working cell each time
             working_cell = self.worksheet.cell(row=self.row_offset + row, column=col)
             header_info = self.worksheet.cell(row=1, column=col).value.strip(' ')
             working_cell.value = self.project_info[header_info]
@@ -75,8 +85,29 @@ class WriteData(object):
 
     def pick_rating_color(self, value):
         """ Pick the fill color for the "Rating" field. """
-        value = value.lower().strip()
+        value = value.strip()
         if value in self.COLOR_CODE:
             return self.COLOR_CODE[value]
         else:
             return 'FFFFFF'
+
+    def get_process_areas(self):
+        pa_col = 0
+        # Look for process areas
+        for col in range(1, self.worksheet.max_column):
+            header_info = self.worksheet.cell(row=1, column=col).value.lower().strip(' ')
+            if header_info in 'process areas':
+                pa_col = col
+                break
+
+        for row in range(2, self.worksheet.max_row + 1):
+            working_cell = self.worksheet.cell(row=row, column=pa_col).value.upper()
+            if working_cell not in self.process_areas:
+                self.process_areas.update({working_cell: 1})
+            else:
+                self.process_areas[working_cell] += 1
+
+        return self.process_areas
+
+    def get_project_info(self):
+        return self.project_info
