@@ -63,15 +63,17 @@ class TrendProg(Frame):
             self.file_button.destroy()
 
     def run_program(self):
+        workbook = 'Draft_Detail_Findings.xlsx'
+        worksheet = 'Template'
         # user selected one CAPA
         if self._folder_path is None:
-            docx_to_xlsx.main(self._file_path)
+            docx_to_xlsx.main(self._file_path, workbook, worksheet)
         # user selected a folder of CAPA's
         elif self._file_path is None:
             for f in os.listdir(self._folder_path):
                 # get full path name
                 file_name = str(self._folder_path + '/' + f)
-                docx_to_xlsx.main(file_name)
+                docx_to_xlsx.main(file_name, workbook, worksheet)
 
         # get ready to end the program
         self.frame_1.destroy()

@@ -6,11 +6,10 @@ import get_data
 import write_data
 
 
-def main(argv):
+def main(argv, workbook_name, worksheet_name):
     """ Run the program. """
     print('Loading {}'.format(argv))
-    destination = 'Draft_Detail_Findings.xlsx'
-    project = get_data.GetData(argv, destination)
+    project = get_data.GetData(argv, workbook_name, worksheet_name)
     project.process_document()
     workbook = project.get_workbook()
     worksheet = project.get_worksheet()
@@ -22,13 +21,11 @@ def main(argv):
     do_write.write_to_sheet()
     project_info = do_write.get_project_info()
     process_areas = do_write.get_process_areas()
-    print(process_areas)
-    print(project_info)
 
     # save changes
-    print('Saving to {}'.format(destination))
-    workbook.save(destination)
+    print('Saving to {}'.format(workbook_name))
+    workbook.save(workbook_name)
     print('Done.')
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2], sys.argv[3])

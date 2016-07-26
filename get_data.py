@@ -8,10 +8,10 @@ from openpyxl import load_workbook
 class GetData(object):
     """ Read the final CAPA and extract info. """
 
-    def __init__(self, document, workbook):
-        self.workbook = load_workbook(workbook)
-        self.worksheet = self.workbook.get_sheet_by_name('Template')
+    def __init__(self, document, workbook, worksheet):
         self.document = Document(document)
+        self.workbook = load_workbook(workbook)
+        self.worksheet = self.workbook.get_sheet_by_name(worksheet)
         self.table_data = []
         self.data_read = []
         self.project_info = {}
