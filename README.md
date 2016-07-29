@@ -10,7 +10,7 @@ automate as much of that process as possible.
 The program reads a Word document and keeps track of information about the project as well as the "Detail of Findings" table. It
 will then put this information into an Excel worksheet.
 
-* Final CAPA's will have to be manually selected from the network drive and put into a folder.This is because leads will often
+* Final CAPA's will have to be manually selected from the network drive and put into a folder. This is because leads will often
   save several different versions of a CAPA report and their names will vary.
 
   Draft_Detail_Findings.xlsx should be in the same working directory as the .exe file
