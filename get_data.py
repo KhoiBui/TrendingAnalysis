@@ -33,12 +33,14 @@ class GetData(object):
         self.data_read = []
         self.project_info = {}
         self.table = None
+        self.leads = ['Adam', 'Monika', 'Jeff', 'Mario']
         self.findings = ['Process Area', 'Goal', 'Practice', 'Description', 'Rating']
 
     def process_document(self):
         """ Process the document. """
-        self.read_doc()
         self.find_table()
+        self.read_doc()
+        print(self.project_info)
         if self.table is None:
             # no table found
             print("#####    Not able to find \"Detail of Findings\" table.   #####")
@@ -48,9 +50,9 @@ class GetData(object):
         """ The rest of project_info's values are updated in write_data.py
             since picking the 'Rating' cells' color also checks for what
             the rating is. """
-        self.project_info.update({'Project Name': self.data_read[2]})
-        self.project_info.update({'Lead(s)': self.data_read[3]})
-        self.project_info.update({'Date Reported': self.data_read[4]})
+        # self.project_info.update({'Project Name': self.data_read[2]})
+        # self.project_info.update({'Lead(s)': self.data_read[3]})
+        # self.project_info.update({'Date Reported': self.data_read[4]})
 
     def find_table(self):
         """ Locate the detailed findings table. """
@@ -62,6 +64,8 @@ class GetData(object):
                 for cell in row.cells:
                     for para in cell.paragraphs:
                         header.append(para.text.strip(' '))
+                # new versions of final CAPA's keep project information in a table
+                self.fill_project_info(header, new_format=True)
                 # check if elements in findings is also in header
                 cond = len(header) == 5 and header[4] == 'Rating'
                 if cond or [x for x in self.findings for y in header if x in y] == self.findings:
@@ -76,20 +80,33 @@ class GetData(object):
             if text.strip():
                 # remove duplicated spaces
                 text = ' '.join(text.split())
-                self.fill_project_info(text)
+                # for older versions of final CAPA's
+                self.fill_project_info(text, new_format=False)
                 self.data_read.append(text)
 
-    def fill_project_info(self, line_read):
+        # need the index
+        for i in range(0, len(self.data_read)):
+            if next((x for x in self.leads if x in self.data_read[i]), None):
+                self.project_info.update({'Lead(s)': self.data_read[i]})
+                self.project_info.update({'Project Name': self.data_read[i - 1]})
+                self.project_info.update({'Date Reported': self.data_read[i + 1]})
+                break
+
+    def fill_project_info(self, line_read, new_format):
         """ Get general information about the project from doc. """
-        line_read = line_read.split(':', 1)
+        if new_format:
+            # remove duplicates
+            line_read = list(set(line_read))
+        else:
+            line_read = line_read.split(':', 1)
         line_read[0] = re.sub('[- ]', '', line_read[0])
         key_name = line_read[0].lower()
 
-        if 'sap' in key_name:
+        if 'sapid' in key_name:
             self.project_info.update({'SAP ID': line_read[1].strip(' ')})
         elif 'golive' in key_name:
             self.project_info.update({'Go Live Date': line_read[1]})
-        elif 'customer' in key_name:
+        elif 'customername' in key_name or 'customer' in key_name:
             site_name = re.sub('State|Lottery', '', line_read[1])
             site_name = site_name.strip(' ')
             self.project_info.update({'Site': site_name})
@@ -111,11 +128,6 @@ class GetData(object):
         self.table_data = data[1:]
         # trim end of lists
         self.table_data = [row[:5] for row in self.table_data]
-
-    def parse_process_areas(self):
-        for row in self.table_data:
-            pa = next((item for item in self.PROCESS_AREAS if row[0].upper() in item), None)
-            print(pa)
 
     def get_table_data(self):
         """ Return data in table. """

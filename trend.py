@@ -77,7 +77,7 @@ class TrendProg(Frame):
                 docx_to_xlsx.main(file_name, workbook, worksheet)
 
         # get ready to end the program
-        pd = project_data.TrendData(workbook, worksheet)
+        # pd = project_data.TrendData(workbook, worksheet)
         self.frame_1.destroy()
         self.run_button.destroy()
         self.close_button.config(text='Done.')

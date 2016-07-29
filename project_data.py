@@ -24,11 +24,11 @@ class TrendData(object):
         self.workbook = load_workbook(workbook)
         self.worksheet = self.workbook.get_sheet_by_name(worksheet)
         self.get_process_areas()
-        print(self.PROCESS_AREAS)
 
     def get_process_areas(self):
         pa_col = 0
         rating_col = 0
+        # find columns
         for col in range(1, self.worksheet.max_column):
             header = self.worksheet.cell(row=1, column=col).value.strip().lower()
             if header in 'process areas':
@@ -36,11 +36,13 @@ class TrendData(object):
             if header in 'rating':
                 rating_col = col
 
+        # tally up process areas
         for row in range(2, self.worksheet.max_row + 1):
             pa_cell = self.worksheet.cell(row=row, column=pa_col).value.upper()
             rating_cell = self.worksheet.cell(row=row, column=rating_col).value.lower()
             pa = next((item for item in self.PROCESS_AREAS if pa_cell in item), None)
             try:
                 pa[rating_cell] += 1
+                pa['ALL PA\'S'] += 1
             except KeyError:
                 pass

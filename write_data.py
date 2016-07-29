@@ -78,7 +78,10 @@ class WriteData(object):
             # Styling has to be applied directly to working cell each time
             working_cell = self.worksheet.cell(row=self.row_offset + row, column=col)
             header_info = self.worksheet.cell(row=1, column=col).value.strip(' ')
-            working_cell.value = self.project_info[header_info]
+            try:
+                working_cell.value = self.project_info[header_info]
+            except KeyError:
+                pass
             working_cell.alignment = Alignment(horizontal='center',
                                                vertical='center',
                                                wrap_text=True)
