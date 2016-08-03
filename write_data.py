@@ -7,7 +7,7 @@ class WriteData(object):
     """ Write to spreadsheet. """
 
     COLOR_CODE = {'LI': '92D050',
-                  'PI': 'FFC000',
+                  'PI': 'FFFF00',
                   'OBV': 'FFC000',
                   'NI': 'FF0000'}
 

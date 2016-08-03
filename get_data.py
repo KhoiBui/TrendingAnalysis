@@ -40,7 +40,6 @@ class GetData(object):
         """ Process the document. """
         self.find_table()
         self.read_doc()
-        print(self.project_info)
         if self.table is None:
             # no table found
             print("#####    Not able to find \"Detail of Findings\" table.   #####")
@@ -65,7 +64,8 @@ class GetData(object):
                     for para in cell.paragraphs:
                         header.append(para.text.strip(' '))
                 # new versions of final CAPA's keep project information in a table
-                self.fill_project_info(header, new_format=True)
+                if 'Project Information' in header:
+                    self.read_new_format(table)
                 # check if elements in findings is also in header
                 cond = len(header) == 5 and header[4] == 'Rating'
                 if cond or [x for x in self.findings for y in header if x in y] == self.findings:
@@ -74,6 +74,7 @@ class GetData(object):
 
     def read_doc(self):
         """ Read document and put info into list. """
+        self.data_read[:] = []
         for para in self.document.paragraphs:
             text = para.text
             # skip blank lines
@@ -95,8 +96,16 @@ class GetData(object):
     def fill_project_info(self, line_read, new_format):
         """ Get general information about the project from doc. """
         if new_format:
-            # remove duplicates
-            line_read = list(set(line_read))
+            """ list(set()) converts list into a set to remove duplicates, but
+                does not preserve order. dict key must always be 1st element
+                in line_read else the project_info dict will not be updated
+                properly. The code below gets rid of duplicated values while
+                preserving the order of the elements in line_read. Code was
+                taken from a StackOverflow thread about the same issue. """
+            tmp_list = set()    # new empty set
+            tmp_add = tmp_list.add    # built-in method 'add' of set object
+            temp = [x for x in line_read if not (x in tmp_list or tmp_add(x))]
+            line_read = temp
         else:
             line_read = line_read.split(':', 1)
         line_read[0] = re.sub('[- ]', '', line_read[0])
@@ -104,12 +113,26 @@ class GetData(object):
 
         if 'sapid' in key_name:
             self.project_info.update({'SAP ID': line_read[1].strip(' ')})
-        elif 'golive' in key_name:
+        if 'golive' in key_name:
             self.project_info.update({'Go Live Date': line_read[1]})
-        elif 'customername' in key_name or 'customer' in key_name:
+        if 'customer' in key_name:
             site_name = re.sub('State|Lottery', '', line_read[1])
             site_name = site_name.strip(' ')
             self.project_info.update({'Site': site_name})
+
+    def read_new_format(self, table):
+        """ Read the project information in new format of CAPA report. """
+        data = []
+        index = 0
+        for row in table.rows:
+            data.append([])
+            for cell in row.cells:
+                text = ''
+                for para in cell.paragraphs:
+                    text += para.text.strip(' ')
+                data[index].append(text)
+            self.fill_project_info(data[index], new_format=True)
+            index += 1
 
     def read_table_data(self, table):
         """ Read info in specified table. """
@@ -126,7 +149,7 @@ class GetData(object):
 
         # don't need header row anymore
         self.table_data = data[1:]
-        # trim end of lists
+        # trim end of list
         self.table_data = [row[:5] for row in self.table_data]
 
     def get_table_data(self):

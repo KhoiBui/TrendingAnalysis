@@ -3,8 +3,8 @@
 import docx_to_xlsx
 import os
 import subprocess
+import re
 import time
-import project_data
 import tkinter as tk
 from tkinter import filedialog, Frame, BOTH, Button, RIGHT, RAISED,\
                     LEFT
@@ -100,16 +100,15 @@ class TrendProg(Frame):
         if str(user_input).endswith('.docx'):
             return user_input
         else:
-            new_file_name = user_input.split(' ')
-            new_file_name = new_file_name[0] + '_' + new_file_name[1] + '_CAPA.docx'
+            new_file_name = re.sub('.doc', '.docx', user_input)
             word_conv = r'C:\Program Files (x86)\Microsoft Office\Office12\wordconv.exe'
             commands = ['wordconv.exe', '-oice', '-nme', user_input, new_file_name]
             try:
-                print('Converting {} to {}'.format(user_input, new_file_name))
+                print('Converting {}'.format(user_input))
                 subprocess.Popen(commands, executable=word_conv)
                 # wait for converted file to be created
                 while not os.path.exists(new_file_name):
-                    time.sleep(1)
+                    time.sleep(1.5)
                 print('Removing old .doc file ...')
                 os.remove(user_input)
                 return new_file_name
