@@ -11,11 +11,14 @@ The program reads a Word document and keeps track of information about the proje
 will then put this information into an Excel worksheet.
 
 * Final CAPA's will have to be manually selected from the network drive and put into a folder. This is because leads will often
-  save several different versions of a CAPA report and their names will vary.
+  save several different versions of a CAPA report and the name of these reports will vary. Writing a script to pull reports is
+  challenging because it would have to account for all of the variations found in not only the name of the .doc/.docx files but
+  also in the content of those files. Until some kind of convention is established, it is better to use Windows Explorer for
+  this step.
 
-  Draft_Detail_Findings.xlsx should be in the same working directory as the .exe file
+* Draft_Detail_Findings.xlsx should be in the same working directory as the .exe file
 
-  The directory structure should look something like this:
+  The directory tree should look something like this:
   
   ```
   TrendingProg
@@ -43,15 +46,19 @@ will then put this information into an Excel worksheet.
   ├── trend.py
   └── write_data.py
   ```
+  
+  The trend directory will have to be set up manually.
 
-* The Final CAPA's need to be saved in the newer format, .docx as Python-docx does not support .doc. The program will automatically
+* The Final CAPA's need to be saved in the newer format, .docx, as Python-docx does not support .doc. The program will automatically
   convert .doc to .docx using wordconv.exe from the Microsoft Office Compatibility Pack and delete the older files.
 
   The Compatibility Pack can be downloaded here: https://www.microsoft.com/en-us/download/details.aspx?id=3
 
-* Create the executable by forking this repo into a new folder and run this command within the folder
+* Create the executable by forking this repo into a new folder and run this command within it
 
   `pyinstaller --clean -F trend.py`
+  
+  This will create two folders: build and dist. Move the executable in dist to trend.
 
 
  
