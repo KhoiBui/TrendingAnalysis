@@ -147,8 +147,11 @@ class GetData(object):
                 data[index].append(text_data)
             index += 1
 
-        # don't need header row anymore
-        self.table_data = data[1:]
+        if all('CAPA' in x for x in data[0]):
+            self.table_data = data[2:]
+        else:
+            # don't need header row anymore
+            self.table_data = data[1:]
         # trim end of list
         self.table_data = [row[:5] for row in self.table_data]
 
