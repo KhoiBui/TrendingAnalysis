@@ -49,8 +49,6 @@ class TrendProg(Frame):
         self._file_path = filedialog.askopenfilename()
         if self._file_path != '':
             self.file_button.config(text='File Selected!')
-            # check that file(s) selected is .docx NOT .doc
-            self.check_ext()
             self.file_button.pack(fill=BOTH, expand=True, padx=5, pady=5)
             self.folder_button.destroy()
 
@@ -58,8 +56,6 @@ class TrendProg(Frame):
         self._folder_path = filedialog.askdirectory()
         if self._folder_path != '':
             self.folder_button.config(text='Folder Selected!')
-            # check that file(s) selected is .docx NOT .doc
-            self.check_ext()
             self.folder_button.pack(fill=BOTH, expand=True, padx=5, pady=5)
             self.file_button.destroy()
 
@@ -67,53 +63,49 @@ class TrendProg(Frame):
         workbook = 'Draft_Detail_Findings.xlsx'
         worksheet = 'Template'
         # user selected one CAPA
-        if self._folder_path is None:
+        print('=' * 75)
+        if self._folder_path == '' or self._folder_path is None:
+            self._file_path = self.convert_to_docx(self._file_path)
             docx_to_xlsx.main(self._file_path, workbook, worksheet)
+            print('=' * 75)
         # user selected a folder of CAPA's
-        elif self._file_path is None:
+        elif self._file_path == '' or self._file_path is None:
             for f in os.listdir(self._folder_path):
                 # get full path name
                 file_name = str(self._folder_path + '/' + f)
+                file_name = self.convert_to_docx(file_name)
                 docx_to_xlsx.main(file_name, workbook, worksheet)
+                print('=' * 75)
 
         # get ready to end the program
         # pd = project_data.TrendData(workbook, worksheet)
+        print('Done.')
         self.frame_1.destroy()
         self.run_button.destroy()
         self.close_button.config(text='Done.')
         self.close_button.pack(fill=BOTH, expand=True, padx=10, pady=10)
 
-    def check_ext(self):
-        if self._file_path is not None:
-            self._file_path = self.convert_to_docx(self._file_path)
-            print('Ready. Click \'Run\' to Proceed.')
-        elif self._folder_path is not None:
-            for f in os.listdir(self._folder_path):
-                file_name = str(self._folder_path + '/' + f)
-                self.convert_to_docx(file_name)
-            print('Ready. Click \'Run\' to Proceed.')
-        else:
-            raise OSError('File(s) does not exist or you did not select anything. ')
-
     @classmethod
-    def convert_to_docx(cls, user_input):
-        if str(user_input).endswith('.docx'):
-            return user_input
+    def convert_to_docx(cls, file_selected):
+        """ Check that file(s) selected is .docx NOT .doc and convert if needed. """
+        if str(file_selected).endswith('.docx'):
+            return file_selected
         else:
-            new_file_name = re.sub('.doc', '.docx', user_input)
+            new_file_name = re.sub('.doc', '.docx', file_selected)
+            # full path to wordconv.exe
             word_conv = r'C:\Program Files (x86)\Microsoft Office\Office12\wordconv.exe'
-            commands = ['wordconv.exe', '-oice', '-nme', user_input, new_file_name]
+            commands = ['wordconv.exe', '-oice', '-nme', file_selected, new_file_name]
             try:
-                print('Converting {}'.format(user_input))
+                print('CONVERTING {}'.format(file_selected))
                 subprocess.Popen(commands, executable=word_conv)
                 # wait for converted file to be created
                 while not os.path.exists(new_file_name):
                     time.sleep(1.5)
-                print('Removing old .doc file ...')
-                os.remove(user_input)
+                print('REMOVING old .doc file ...')
+                os.remove(file_selected)
                 return new_file_name
             except OSError:
-                print('Failed to convert file(s). Check to see if it exists.')
+                print('FAILED to convert file. Check to see if it exists.')
 
 
 def main():

@@ -45,13 +45,8 @@ class GetData(object):
             print("#####    Not able to find \"Detail of Findings\" table.   #####")
             print("##### Possible that project does not have any findings. #####")
             return
+        print(self.project_info)
         self.read_table_data(self.table)
-        """ The rest of project_info's values are updated in write_data.py
-            since picking the 'Rating' cells' color also checks for what
-            the rating is. """
-        # self.project_info.update({'Project Name': self.data_read[2]})
-        # self.project_info.update({'Lead(s)': self.data_read[3]})
-        # self.project_info.update({'Date Reported': self.data_read[4]})
 
     def find_table(self):
         """ Locate the detailed findings table. """
@@ -85,11 +80,14 @@ class GetData(object):
                 self.fill_project_info(text, new_format=False)
                 self.data_read.append(text)
 
-        # need the index
+        # Constant in old & new report format
+        # Batch/Project name
+        # Lead(s)'s name
+        # Reported date
         for i in range(0, len(self.data_read)):
             if next((x for x in self.leads if x in self.data_read[i]), None):
-                self.project_info.update({'Lead(s)': self.data_read[i]})
                 self.project_info.update({'Project Name': self.data_read[i - 1]})
+                self.project_info.update({'Lead(s)': self.data_read[i]})
                 self.project_info.update({'Date Reported': self.data_read[i + 1]})
                 break
 
@@ -147,10 +145,10 @@ class GetData(object):
                 data[index].append(text_data)
             index += 1
 
+        # trim unneeded rows in old & new reports
         if all('CAPA' in x for x in data[0]):
             self.table_data = data[2:]
         else:
-            # don't need header row anymore
             self.table_data = data[1:]
         # trim end of list
         self.table_data = [row[:5] for row in self.table_data]

@@ -8,7 +8,7 @@ import write_data
 
 def main(document, workbook_name, worksheet_name):
     """ Run the program. """
-    print('Loading {}'.format(document))
+    print('LOADING {}'.format(document))
     project = get_data.GetData(document, workbook_name, worksheet_name)
     project.process_document()
     workbook = project.get_workbook()
@@ -23,9 +23,8 @@ def main(document, workbook_name, worksheet_name):
     # process_areas = do_write.get_process_areas()
 
     # save changes
-    print('Saving to {}'.format(workbook_name))
+    print('SAVING to {}'.format(workbook_name))
     workbook.save(workbook_name)
-    print('Done.')
 
 if __name__ == '__main__':
     main(sys.argv[1], sys.argv[2], sys.argv[3])
