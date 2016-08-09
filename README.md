@@ -10,6 +10,19 @@ automate as much of that process as possible.
 The program reads a Word document and keeps track of information about the project as well as the "Detail of Findings" table. It
 will then put this information into an Excel worksheet.
 
+* The Final CAPA's need to be saved in the newer format, .docx, as Python-docx does not support .doc. The program will automatically
+  convert .doc to .docx using wordconv.exe from the Microsoft Office Compatibility Pack and delete the older files.
+
+  The Compatibility Pack can be downloaded here: https://www.microsoft.com/en-us/download/details.aspx?id=3
+
+* The program is written in Python 3.5 and uses openpyxl to read/write to .xlsx files and Python-docx to read/write .docx files.
+
+  Use Pyinstaller to create the executable by forking this repo into a new folder and run this command within it:
+
+  `pyinstaller --clean -F trend.py`
+  
+  This will create two folders: build and dist. Move the executable in dist to trend.
+
 * Final CAPA's will have to be manually selected from the network drive and put into a folder. This is because leads will often
   save several different versions of a CAPA report and the name of these reports will vary. Writing a script to pull reports is
   challenging because it would have to account for all of the variations found in not only the name of the .doc/.docx files but
@@ -48,19 +61,6 @@ will then put this information into an Excel worksheet.
   ```
   
   The trend directory will have to be set up manually.
-
-* The Final CAPA's need to be saved in the newer format, .docx, as Python-docx does not support .doc. The program will automatically
-  convert .doc to .docx using wordconv.exe from the Microsoft Office Compatibility Pack and delete the older files.
-
-  The Compatibility Pack can be downloaded here: https://www.microsoft.com/en-us/download/details.aspx?id=3
-
-* Create the executable by forking this repo into a new folder and run this command within it
-
-  `pyinstaller --clean -F trend.py`
-  
-  This will create two folders: build and dist. Move the executable in dist to trend.
-
-
  
 
 ## Observations
