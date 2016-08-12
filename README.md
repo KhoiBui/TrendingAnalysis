@@ -78,6 +78,5 @@ Inconsistent:
   - Newer versions of CAPA reports have two extra non-empty lines on first page
     
 Consistent:
-  - Batch name on first page is always followed by Lead(s)'s name
-  - followed by reported date
+  - Batch name on first page is always followed by Lead(s)'s name followed by reported date
   - SAP ID, Go Live, and Site always included under "Project Information"
