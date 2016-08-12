@@ -16,12 +16,26 @@ will then put this information into an Excel worksheet.
   The Compatibility Pack can be downloaded here: https://www.microsoft.com/en-us/download/details.aspx?id=3
 
 * The program is written in Python 3.5 and uses openpyxl to read/write to .xlsx files and Python-docx to read/write .docx files.
+  
+  Python 3.5 for Windows can be downloaded here: https://www.python.org/downloads/release/python-350/
 
+  To install the required libraries use:
+  
+  ```
+  pip install openpyxl
+  pip install python-docx
+  pip install pyinstaller
+  ```
+  
+  These packages may have their own dependencies, which will also need to be installed.
+  
   Use Pyinstaller to create the executable by forking this repo into a new folder and run this command within it:
 
   `pyinstaller --clean -F trend.py`
   
-  This will create two folders: build and dist. Move the executable in dist to trend.
+  This will create two folders: build and dist. Move the executable file in /dist/ to trend. The executable allows the program
+  to be portable across different machines. In other words, you can share the program with another person and have it still run
+  without requiring them to have the appropriate libraries.
 
 * Final CAPA's will have to be manually selected from the network drive and put into a folder. This is because leads will often
   save several different versions of a CAPA report and the name of these reports will vary. Writing a script to pull reports is
