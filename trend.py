@@ -20,6 +20,7 @@ class TrendProg(Frame):
         self._file_path = None
         self._folder_path = None
 
+        # set properties of buttons
         self.frame_1 = Frame(self, relief=RAISED)
         self.run_button = Button(self, text='Run', width=10,
                                  command=self.run_program)
@@ -32,8 +33,6 @@ class TrendProg(Frame):
         self.init_gui()
 
     def init_gui(self):
-        """ Create the GUI. """
-        # set title of root window
         self.parent.title('Trending Analysis')
         # fill frame to take up whole of root window
         self.pack(fill=BOTH, expand=True)

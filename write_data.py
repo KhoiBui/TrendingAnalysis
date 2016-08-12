@@ -94,23 +94,24 @@ class WriteData(object):
         else:
             return 'FFFFFF'
 
-    def get_process_areas(self):
-        pa_col = 0
-        # Look for process areas
-        for col in range(1, self.worksheet.max_column):
-            header_info = self.worksheet.cell(row=1, column=col).value.lower().strip(' ')
-            if header_info in 'process areas':
-                pa_col = col
-                break
-
-        for row in range(2, self.worksheet.max_row + 1):
-            working_cell = self.worksheet.cell(row=row, column=pa_col).value.upper()
-            if working_cell not in self.process_areas:
-                self.process_areas.update({working_cell: 1})
-            else:
-                self.process_areas[working_cell] += 1
-
-        return self.process_areas
+    # might not be as viable as previously thought
+    # def get_process_areas(self):
+    #     pa_col = 0
+    #     # Look for process areas
+    #     for col in range(1, self.worksheet.max_column):
+    #         header_info = self.worksheet.cell(row=1, column=col).value.lower().strip(' ')
+    #         if header_info in 'process areas':
+    #             pa_col = col
+    #             break
+    #
+    #     for row in range(2, self.worksheet.max_row + 1):
+    #         working_cell = self.worksheet.cell(row=row, column=pa_col).value.upper()
+    #         if working_cell not in self.process_areas:
+    #             self.process_areas.update({working_cell: 1})
+    #         else:
+    #             self.process_areas[working_cell] += 1
+    #
+    #     return self.process_areas
 
     def get_project_info(self):
         return self.project_info

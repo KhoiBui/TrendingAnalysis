@@ -19,8 +19,6 @@ def main(document, workbook_name, worksheet_name):
     # write to spreadsheet
     do_write = write_data.WriteData(worksheet, table_data, project_info)
     do_write.write_to_sheet()
-    # project_info = do_write.get_project_info()
-    # process_areas = do_write.get_process_areas()
 
     # save changes
     print('SAVING to {}'.format(workbook_name))
