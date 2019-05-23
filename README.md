@@ -1,4 +1,4 @@
-# TrendingProg
+# Trending Analysis
 The purpose of this program is to assist with doing monthly trending analysis. The Standards Compliance team at IGT compiles a
 spreadsheet of data from projects each month. This allows managers to observe trends as they develop and help to better
 identify problematic process areas and their causes. Getting the data for trending analysis is a very manual task that involves
